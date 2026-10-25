@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrustVault — Secure Document Management</title>
+<style>
+:root{--bg:#050b08;--sidebar:#080f0c;--panel:#0d1a13;--panel2:#10251a;--line:#1d3a2a;--green:#29e991;--green2:#83ffca;--text:#f1fff7;--muted:#91aa9b;--red:#ff8c9b}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}
+.brand{display:flex;align-items:center;gap:12px;font-weight:850;font-size:23px;letter-spacing:-.5px}.mark{width:42px;height:42px;border-radius:13px;background:var(--green);color:#032114;display:grid;place-items:center;font-size:25px;font-weight:900;box-shadow:0 0 25px #29e99118}
+#authScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:32px 18px;background:radial-gradient(ellipse at 50% 35%,#0d291b 0%,#06110b 52%,#030805 100%)}
+.auth-wrap{width:min(100%,510px)}.auth-brand{justify-content:center;margin-bottom:24px}.auth-brand .mark{width:35px;height:35px;border-radius:10px;font-size:21px}.eyebrow{text-align:center;color:var(--green);font-weight:800;font-size:11px;letter-spacing:2.1px;margin-bottom:12px}.auth-card{border:1px solid #203c2b;border-radius:22px;background:rgba(7,20,12,.94);padding:30px 34px;box-shadow:0 25px 80px #0007}.auth-card h1{text-align:center;font-size:29px;margin:0 0 7px;letter-spacing:-.7px}.auth-sub{text-align:center;color:var(--muted);font-size:13px;margin:0 0 27px}.field{margin:17px 0}.field label{display:block;font-size:13px;font-weight:750;margin:0 0 9px}.field input{width:100%;height:49px;padding:0 15px;background:#0b2115;border:1px solid #234332;border-radius:12px;color:var(--text);outline:none}.field input:focus{border-color:var(--green);box-shadow:0 0 0 3px #29e99117}.field input::placeholder{color:#678374}.helper{font-size:11px;color:#819b8b;margin-top:8px}.password-wrap{position:relative}.password-wrap input{padding-right:48px}.eye{position:absolute;right:8px;top:5px;height:39px;width:35px;background:transparent;border:0;color:#9ab5a4;font-size:16px}.match{font-size:12px;margin-top:8px;color:var(--green)}.match.bad{color:var(--red)}.primary{width:100%;border:0;border-radius:12px;height:54px;background:linear-gradient(100deg,#8affcc,#25e58e);color:#032314;font-weight:900;font-size:16px;box-shadow:0 8px 28px #29e9911b;transition:.15s}.primary:hover{filter:brightness(1.06);transform:translateY(-1px)}.primary:active{transform:translateY(0)}.switch{text-align:center;font-size:12px;color:var(--muted);margin:20px 0 0}.link{color:var(--green);font-weight:800;text-decoration:none;cursor:pointer}.notice{display:none;border-radius:10px;padding:11px 13px;margin:14px 0 0;font-size:12px;line-height:1.5}.notice.show{display:block}.notice.error{background:#32191b;color:#ffc6ce;border:1px solid #75383e}.notice.success{background:#102d1d;color:#b7ffd7;border:1px solid #236c44}
+#app{display:none;min-height:100vh}.sidebar{position:fixed;left:0;top:0;bottom:0;width:344px;background:var(--sidebar);border-right:1px solid #1a2c21;padding:24px 15px;display:flex;flex-direction:column;z-index:5}.side-top{display:flex;align-items:center;justify-content:space-between;padding:0 2px 23px;border-bottom:1px solid #1b2b21}.side-top .brand{font-size:23px}.hamb{background:#09120d;border:1px solid #23362a;color:var(--green);border-radius:12px;width:49px;height:49px;font-size:24px}.nav{padding-top:22px;display:grid;gap:7px}.nav button{display:flex;align-items:center;gap:19px;text-align:left;padding:17px 22px;background:transparent;border:1px solid transparent;border-radius:14px;color:var(--green);font-size:16px;font-weight:700}.nav button .ico{font-size:20px;width:24px;text-align:center}.nav button:hover,.nav button.active{background:#102719;border-color:#239c5d}.vault-protected{margin-top:auto;background:#102719;border:1px solid #225b39;border-radius:16px;padding:17px 15px;display:flex;align-items:center;gap:14px}.shield{background:var(--green);color:#052315;border-radius:12px;width:52px;height:52px;display:grid;place-items:center;font-size:28px}.vault-protected b{display:block;color:var(--green);font-size:14px;margin-bottom:6px}.vault-protected span{color:var(--muted);font-size:13px}
+.main{margin-left:344px;min-height:100vh;display:flex;flex-direction:column}.topbar{height:103px;display:flex;align-items:center;justify-content:space-between;padding:0 38px;border-bottom:1px solid #1a2c21;background:#050b08;position:sticky;top:0;z-index:3}.topbar .brand{font-size:24px}.top-right{display:flex;align-items:center;gap:22px}.session{border:1px solid #23633e;color:var(--green);border-radius:999px;padding:13px 17px;font-weight:750;font-size:13px;background:#0a1a10}.avatar{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:var(--green);color:#052315;font-weight:900;font-size:18px;border:0}
+.content{padding:28px 32px 40px;flex:1}.searchbar{display:flex;gap:16px;align-items:center;background:#0b1710;border:1px solid #203c2b;border-radius:18px;padding:20px;margin:0 0 46px}.searchinput{position:relative;flex:1}.searchinput span{position:absolute;left:18px;top:15px;color:var(--green);font-size:20px}.searchinput input{width:100%;height:60px;border:1px solid #24412f;border-radius:13px;background:#0c1b12;color:var(--text);padding:0 18px 0 58px;outline:none}.searchinput input:focus{border-color:var(--green)}.greenbtn{background:var(--green);color:#042414;border:0;border-radius:12px;padding:16px 23px;font-weight:850}.greenbtn:hover{filter:brightness(1.08)}.section-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:25px}.section-head h1{font-size:25px;margin:0 0 12px;letter-spacing:-.4px}.section-head p{margin:0;color:var(--muted);font-size:14px}.count{white-space:nowrap;border:1px solid #23633e;background:#0b2115;color:var(--green);padding:13px 16px;border-radius:999px;font-weight:750;font-size:13px}
+.empty{min-height:420px;border:1px dashed #284431;border-radius:22px;background:#0c1910;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px}.empty .empty-icon{font-size:48px;color:var(--green);margin-bottom:22px}.empty h2{font-size:26px;margin:0 0 22px}.empty p{color:var(--muted);font-size:15px;margin:0 0 34px}.empty .greenbtn{min-width:295px}
+.doc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px}.doc-card,.category-card,.activity-card{background:#0d1c12;border:1px solid #23412d;border-radius:15px;padding:20px}.doc-card .fileico{font-size:27px;color:var(--green)}.doc-card h3{font-size:16px;overflow-wrap:anywhere}.doc-card p,.category-card p,.activity-card p{color:var(--muted);font-size:13px;line-height:1.6}.doc-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.smallbtn{border:1px solid #2c583b;background:#102719;color:var(--green);border-radius:9px;padding:9px 11px;font-size:12px;font-weight:750}.smallbtn.danger{color:#ff9ba6;border-color:#60313a;background:#211116}.page-panel{border:1px solid #203c2b;background:#0b1710;border-radius:18px;padding:25px}.page-panel h2{margin-top:0}.form-grid{max-width:650px;display:grid;gap:15px}.form-grid label{font-size:13px;font-weight:700;display:block;margin-bottom:8px}.form-grid input,.form-grid select,.form-grid textarea{width:100%;background:#0c2114;border:1px solid #284633;color:var(--text);border-radius:10px;padding:13px}.form-grid input[type=file]{padding:12px}.form-grid .greenbtn{justify-self:start}.categories{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}.category-card{padding:23px}.category-card .fileico{font-size:26px;color:var(--green)}.category-card h3{margin:13px 0}.category-card .smallbtn{margin-top:8px}.activity-row{display:flex;gap:14px;padding:15px 0;border-bottom:1px solid #1c3223}.activity-row:last-child{border-bottom:0}.activity-dot{background:#143c24;color:var(--green);width:35px;height:35px;border-radius:10px;display:grid;place-items:center;flex-shrink:0}.activity-row b{font-size:14px}.activity-row p{margin:5px 0 0;color:var(--muted);font-size:12px}.denied{min-height:55vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}.denied h1{font-size:32px;margin:0 0 14px}.denied p{color:var(--muted);line-height:1.7;max-width:500px}
+footer{padding:24px 38px;border-top:1px solid #17291d;color:#7e9b88;font-size:13px;display:flex;justify-content:space-between;gap:16px}
+.mobile-menu{display:none}
+@media(max-width:1000px){.sidebar{width:270px}.main{margin-left:270px}.content{padding:22px}.topbar{padding:0 22px}.sidebar .brand{font-size:19px}.nav button{padding:14px;font-size:14px}}
+@media(max-width:720px){.sidebar{transform:translateX(-100%);width:290px;transition:transform .2s}.sidebar.open{transform:translateX(0)}.main{margin-left:0}.topbar{height:78px;padding:0 16px}.topbar .brand{font-size:18px}.topbar .mark{width:35px;height:35px}.session{padding:9px 11px;font-size:11px}.avatar{width:40px;height:40px}.top-right{gap:9px}.mobile-menu{display:inline-block}.content{padding:17px}.searchbar{padding:12px;gap:8px;margin-bottom:28px}.searchinput input{height:48px;padding-left:40px}.searchinput span{left:12px;top:10px}.searchbar .greenbtn{padding:13px}.section-head{align-items:flex-start}.section-head h1{font-size:22px}.count{font-size:11px;padding:9px}.empty{min-height:330px}.empty h2{font-size:22px}.empty .greenbtn{min-width:0;width:100%}.auth-card{padding:25px 21px}footer{padding:20px 17px;font-size:11px}}
+</style>
+</head>
+<body>
+<section id="authScreen">
+  <div class="auth-wrap">
+    <div class="brand auth-brand"><span class="mark">◆</span><span>TrustVault</span></div>
+    <div class="eyebrow" id="authEyebrow">JOIN TRUSTVAULT</div>
+    <div class="auth-card">
+      <div id="registerPanel">
+        <h1>Create your account</h1><p class="auth-sub">Your documents deserve secure access.</p>
+        <div class="field"><label for="username">Username</label><input id="username" placeholder="Choose a username" autocomplete="username"><div class="helper">Username must be between 3 and 80 characters.</div></div>
+        <div class="field"><label for="regEmail">Email address</label><input id="regEmail" type="email" placeholder="you@example.com" autocomplete="email"></div>
+        <div class="field"><label for="regPassword">Password</label><div class="password-wrap"><input id="regPassword" type="password" placeholder="Create a strong password" autocomplete="new-password"><button type="button" class="eye" onclick="togglePass('regPassword',this)" aria-label="Show password">⊙</button></div><div class="helper">Use at least 12 characters for your password.</div></div>
+        <div class="field"><label for="confirmPassword">Confirm password</label><div class="password-wrap"><input id="confirmPassword" type="password" placeholder="Enter your password again" autocomplete="new-password"><button type="button" class="eye" onclick="togglePass('confirmPassword',this)" aria-label="Show confirm password">⊙</button></div><div id="matchText" class="match"></div></div>
+        <button type="button" class="primary" id="createAccountBtn" onclick="createAccount()">Create Account&nbsp; →</button>
+        <div id="regNotice" class="notice" role="status" aria-live="polite"></div>
+        <p class="switch">Already registered? <a class="link" onclick="showLogin()">Sign in</a></p>
+      </div>
+      <div id="loginPanel" style="display:none">
+        <h1>Welcome Back</h1><p class="auth-sub">Your Documents, Our Priority</p>
+        <div class="field"><label for="loginIdentity">Username or email</label><input id="loginIdentity" placeholder="Enter your username or email" autocomplete="username"></div>
+        <div class="field"><label for="loginPassword">Password</label><div class="password-wrap"><input id="loginPassword" type="password" placeholder="Enter your password" autocomplete="current-password"><button type="button" class="eye" onclick="togglePass('loginPassword',this)">⊙</button></div></div>
+        <button type="button" class="primary" onclick="signIn()">→&nbsp; Sign In</button>
+        <div id="loginNotice" class="notice" role="status" aria-live="polite"></div>
+        <p class="switch">Don't have an account? <a class="link" onclick="showRegister()">Create Account</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="side-top"><div class="brand"><span class="mark">◆</span><span>TrustVault</span></div><button class="hamb" onclick="toggleSidebar()" aria-label="Toggle menu">☰</button></div>
+    <nav class="nav" id="nav">
+      <button class="active" data-page="Dashboard" onclick="navigate('Dashboard')"><span class="ico">⌂</span>Dashboard</button>
+      <button data-page="My Documents" onclick="navigate('My Documents')"><span class="ico">▤</span>My Documents</button>
+      <button data-page="Search Documents" onclick="navigate('Search Documents')"><span class="ico">⌕</span>Search Documents</button>
+      <button data-page="Categories" onclick="navigate('Categories')"><span class="ico">▦</span>Categories</button>
+      <button data-page="Upload Document" onclick="navigate('Upload Document')"><span class="ico">＋</span>Upload Document</button>
+      <button data-page="Activity Logs" onclick="navigate('Activity Logs')"><span class="ico">◷</span>Activity Logs</button>
+    </nav>
+    <div class="vault-protected"><div class="shield">✓</div><div><b>Vault Protected</b><span>Your files stay secure</span></div></div>
+  </aside>
+  <div class="main">
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:13px"><button class="hamb mobile-menu" onclick="toggleSidebar()">☰</button><div class="brand"><span class="mark">◆</span><span>TrustVault</span></div></div>
+      <div class="top-right"><div class="session">● &nbsp;Secure Session</div><button class="avatar" id="avatar" onclick="accountMenu()" title="Account">U</button></div>
+    </header>
+    <main class="content" id="pageContent"></main>
+    <footer><span>© 2026 TrustVault. All rights reserved.</span><span>Secure Document Management</span></footer>
+  </div>
+</div>
+<script>
+const STORE='trustvault_video_demo_users', DOCS='trustvault_video_demo_docs', LOGS='trustvault_video_demo_logs', SESSION='trustvault_video_demo_session';
+let currentUser=null, currentPage='Dashboard', searchTerm='';
+function getJSON(key,fallback){try{const x=JSON.parse(localStorage.getItem(key)||'null');return x===null?fallback:x}catch(e){return fallback}}
+function saveJSON(key,value){localStorage.setItem(key,JSON.stringify(value))}
+function getUsers(){return getJSON(STORE,[])}function getDocs(){return getJSON(DOCS,[])}function getLogs(){return getJSON(LOGS,[])}
+function logAction(action,detail){let logs=getLogs();logs.unshift({action,detail,at:new Date().toLocaleString(),user:currentUser?currentUser.username:'Guest'});saveJSON(LOGS,logs)}
+function note(id,text,type){let el=document.getElementById(id);el.className='notice show '+type;el.textContent=text}
+function clearNote(id){let el=document.getElementById(id);el.className='notice';el.textContent=''}
+function togglePass(id,btn){let el=document.getElementById(id);el.type=el.type==='password'?'text':'password';btn.textContent=el.type==='password'?'⊙':'◉'}
+function showRegister(){document.getElementById('registerPanel').style.display='block';document.getElementById('loginPanel').style.display='none';document.getElementById('authEyebrow').textContent='JOIN TRUSTVAULT';clearNote('regNotice');clearNote('loginNotice')}
+function showLogin(){document.getElementById('registerPanel').style.display='none';document.getElementById('loginPanel').style.display='block';document.getElementById('authEyebrow').textContent='SECURE ACCESS';clearNote('regNotice');clearNote('loginNotice')}
+document.getElementById('confirmPassword').addEventListener('input',function(){let p=document.getElementById('regPassword').value;let t=document.getElementById('matchText');if(!this.value){t.textContent='';t.className='match'}else if(this.value===p){t.textContent='✓ Passwords match.';t.className='match'}else{t.textContent='Passwords do not match.';t.className='match bad'}});
+document.getElementById('regPassword').addEventListener('input',function(){let c=document.getElementById('confirmPassword');if(c.value)c.dispatchEvent(new Event('input'))});
+function createAccount(){
+ clearNote('regNotice');
+ const username=document.getElementById('username').value.trim();
+ const email=document.getElementById('regEmail').value.trim().toLowerCase();
+ const password=document.getElementById('regPassword').value;
+ const confirm=document.getElementById('confirmPassword').value;
+ if(username.length<3||username.length>80){note('regNotice','Username must be between 3 and 80 characters.','error');return}
+ if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){note('regNotice','Please enter a valid email address.','error');return}
+ if(password.length<12){note('regNotice','Use at least 12 characters for your password.','error');return}
+ if(password!==confirm){note('regNotice','Passwords do not match. Please check and try again.','error');return}
+ let users=getUsers();if(users.some(u=>u.username.toLowerCase()===username.toLowerCase()||u.email===email)){note('regNotice','That username or email is already registered. Please sign in.','error');return}
+ // This is a visual/local prototype only. Use a server and hashed passwords for real accounts.
+ const user={username,email,password,role:'Viewer',createdAt:new Date().toISOString()};
+ try{users.push(user);saveJSON(STORE,users);localStorage.setItem(SESSION,email)}catch(e){note('regNotice','Browser storage is unavailable. Enable site data/local storage and try again.','error');return}
+ currentUser=user;logAction('Account created','New TrustVault account registered');openApp();
+}
+function signIn(){
+ clearNote('loginNotice');const identity=document.getElementById('loginIdentity').value.trim().toLowerCase();const password=document.getElementById('loginPassword').value;
+ if(!identity||!password){note('loginNotice','Enter your username/email and password.','error');return}
+ const user=getUsers().find(u=>(u.username.toLowerCase()===identity||u.email.toLowerCase()===identity)&&u.password===password);
+ if(!user){note('loginNotice','Incorrect login details. Check your information or create an account.','error');return}
+ currentUser=user;localStorage.setItem(SESSION,user.email);logAction('Signed in','User signed in successfully');openApp();
+}
+function openApp(){document.getElementById('authScreen').style.display='none';document.getElementById('app').style.display='block';document.getElementById('avatar').textContent=(currentUser.username||'U').charAt(0).toUpperCase();navigate('Dashboard')}
+function signOut(){if(currentUser)logAction('Signed out','User ended the session');localStorage.removeItem(SESSION);currentUser=null;document.getElementById('app').style.display='none';document.getElementById('authScreen').style.display='flex';showLogin()}
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open')}
+function accountMenu(){if(confirm('Sign out of TrustVault?'))signOut()}
+function navigate(page){currentPage=page;document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===page));document.getElementById('sidebar').classList.remove('open');renderPage()}
+function pageHead(title,desc,count){return `<div class="section-head"><div><h1>${title}</h1><p>${desc}</p></div>${count!==undefined?`<div class="count">${count}</div>`:''}</div>`}
+function searchBox(){return `<div class="searchbar"><div class="searchinput"><span>⌕</span><input id="docSearch" placeholder="Search documents by title..." value="${escapeHTML(searchTerm)}" onkeydown="if(event.key==='Enter')runSearch()"></div><button class="greenbtn" onclick="runSearch()">Search</button></div>`}
+function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function filteredDocs(){let docs=getDocs();return docs.filter(d=>(d.owner===currentUser.email||d.sharedWith&&d.sharedWith.includes(currentUser.email))&&(!searchTerm||d.title.toLowerCase().includes(searchTerm.toLowerCase())))}
+function docsMarkup(docs){if(!docs.length)return `<div class="empty"><div class="empty-icon">▤</div><h2>${searchTerm?'No documents found':'No documents found'}</h2><p>${searchTerm?'Try a different search term.':'Your vault is currently empty. Upload your first document to get started.'}</p><button class="greenbtn" onclick="navigate('Upload Document')">＋ &nbsp;Upload Your First Document</button></div>`;return `<div class="doc-grid">${docs.map((d,i)=>`<article class="doc-card"><div class="fileico">▤</div><h3>${escapeHTML(d.title)}</h3><p>${escapeHTML(d.category||'General')} · ${escapeHTML(d.size||'File')}</p><p>Uploaded ${escapeHTML(d.created||'just now')}</p><div class="doc-actions"><button class="smallbtn" onclick="downloadDoc('${d.id}')">Download</button><button class="smallbtn" onclick="shareDoc('${d.id}')">Share</button><button class="smallbtn danger" onclick="deleteDoc('${d.id}')">Delete</button></div></article>`).join('')}</div>`}
+function renderPage(){
+ const el=document.getElementById('pageContent');
+ if(currentPage==='Dashboard'||currentPage==='My Documents'||currentPage==='Search Documents'){
+  let title=currentPage==='Dashboard'?'Dashboard':currentPage==='My Documents'?'All Documents':'Search Documents';
+  let desc=currentPage==='Dashboard'?'Your secure document workspace.':'Your uploaded files in one place.';
+  el.innerHTML=searchBox()+pageHead(title,desc,`${filteredDocs().length} document(s)`)+docsMarkup(filteredDocs());
+  if(currentPage==='Search Documents'&&!searchTerm){let h=document.querySelector('.section-head h1');if(h)h.textContent='Search Documents'}
+ }else if(currentPage==='Categories'){
+  const cats=['General','Certificates','Contracts','Financial','Personal','Other'];
+  el.innerHTML=pageHead('Categories','Browse documents by category.',undefined)+`<div class="categories">${cats.map(c=>{let n=filteredDocs().filter(d=>(d.category||'General')===c).length;return `<div class="category-card"><div class="fileico">▣</div><h3>${c}</h3><p>${c==='General'?'Everyday files and documents.':c==='Certificates'?'Certificates, awards and qualifications.':c==='Contracts'?'Contracts, agreements and legal documents.':c==='Financial'?'Invoices, financial records and reports.':c==='Personal'?'Your personal and private documents.':'Documents in other categories.'}</p><span class="count">${n} document(s)</span><br><button class="smallbtn" onclick="filterCategory('${c}')">View Documents →</button></div>`}).join('')}</div>`;
+ }else if(currentPage==='Upload Document'){
+  el.innerHTML=pageHead('Upload Document','Add a file to your secure vault.',undefined)+`<div class="page-panel"><h2>Upload a new document</h2><p style="color:var(--muted);font-size:13px;line-height:1.6">Choose a file, give it a title and select a category. In this demo, file content stays in your browser session and is not sent to a server.</p><div class="form-grid"><div><label for="uploadTitle">Document title</label><input id="uploadTitle" placeholder="Enter document title"></div><div><label for="uploadCategory">Category</label><select id="uploadCategory"><option>General</option><option>Certificates</option><option>Contracts</option><option>Financial</option><option>Personal</option><option>Other</option></select></div><div><label for="uploadFile">Choose file</label><input id="uploadFile" type="file"></div><button class="greenbtn" onclick="uploadDoc()">＋ Upload Document</button><div id="uploadNotice" class="notice"></div></div></div>`;
+ }else if(currentPage==='Activity Logs'){
+  let logs=getLogs().filter(l=>l.user===currentUser.username);el.innerHTML=pageHead('Activity Logs','Recent actions in your TrustVault session.',`${logs.length} event(s)`)+`<div class="page-panel"><h2>Recent Activity</h2>${logs.length?logs.map(l=>`<div class="activity-row"><div class="activity-dot">✓</div><div><b>${escapeHTML(l.action)}</b><p>${escapeHTML(l.detail)} · ${escapeHTML(l.at)}</p></div></div>`).join(''):'<div class="empty" style="min-height:220px"><div class="empty-icon">◷</div><h2>No activity yet</h2><p>Your account activity will appear here.</p></div>'}</div>`;
+ }
+}
+function runSearch(){searchTerm=(document.getElementById('docSearch')?.value||'').trim();renderPage();if(currentPage!=='Search Documents')currentPage='Search Documents';document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===currentPage))}
+function filterCategory(c){searchTerm='';currentPage='My Documents';renderPage();let h=document.querySelector('.section-head h1');if(h)h.textContent=c+' Documents';let docs=filteredDocs().filter(d=>(d.category||'General')===c);document.getElementById('pageContent').innerHTML=searchBox()+pageHead(c+' Documents','Documents in this category.',`${docs.length} document(s)`)+docsMarkup(docs)}
+function uploadDoc(){
+ const title=document.getElementById('uploadTitle').value.trim(),file=document.getElementById('uploadFile').files[0],category=document.getElementById('uploadCategory').value;
+ if(!title){note('uploadNotice','Please enter a document title.','error');return}if(!file){note('uploadNotice','Please choose a file to upload.','error');return}
+ const docs=getDocs();docs.unshift({id:String(Date.now()),title,category,size:formatBytes(file.size),created:new Date().toLocaleDateString(),owner:currentUser.email,fileName:file.name});saveJSON(DOCS,docs);logAction('Document uploaded',title);navigate('My Documents');
+}
+function formatBytes(n){if(n<1024)return n+' B';if(n<1048576)return (n/1024).toFixed(1)+' KB';return (n/1048576).toFixed(1)+' MB'}
+function deleteDoc(id){if(!confirm('Delete this document entry?'))return;saveJSON(DOCS,getDocs().filter(d=>d.id!==id));logAction('Document deleted','Document ID '+id);renderPage()}
+function shareDoc(id){const email=prompt('Enter the email address of the person to share with:');if(!email)return;const docs=getDocs();let d=docs.find(x=>x.id===id);if(!d||d.owner!==currentUser.email){alert('Access denied: only the document owner can share this file.');return}d.sharedWith=d.sharedWith||[];if(!d.sharedWith.includes(email.trim().toLowerCase()))d.sharedWith.push(email.trim().toLowerCase());saveJSON(DOCS,docs);logAction('Document shared',d.title+' shared with '+email);alert('Demo permission added for '+email+'. Real multi-user sharing needs a backend.')}
+function downloadDoc(id){const d=getDocs().find(x=>x.id===id);if(!d)return;const blob=new Blob([`TrustVault demo document record\nTitle: ${d.title}\nCategory: ${d.category}\nOriginal filename: ${d.fileName||'unknown'}\n\nThis demo stores document metadata only, not the original file bytes.`],{type:'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=(d.title.replace(/[^a-z0-9_-]/gi,'_')||'document')+'.txt';a.click();URL.revokeObjectURL(a.href);logAction('Document downloaded',d.title)}
+(function init(){try{const email=localStorage.getItem(SESSION);if(email){const user=getUsers().find(u=>u.email===email);if(user){currentUser=user;openApp();return}}}catch(e){}showRegister()})();
+</script>
+</body></html>
